@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/ico" href="favicon.ico"/>
+      <meta charset="utf-8">
+        <title>Hubber Matching Game</title>
+          <link href='https://fonts.googleapis.com/css?family=Sansita+One' rel='stylesheet' type='text/css'>
+          <link href="https://fonts.googleapis.com/css?family=Orbitron:400,700" rel="stylesheet" type="text/css" >
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+          <link rel="stylesheet" href="styles/main.css" />
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Hubber Matching Game</h1>
+    </header>
+            
+  <!-- START OF TIMER -->
+            
+    <div id='countdown'>
+      <button type="button" class="btn btn-info" value="reset" id="reset">Reset</button>
+      <button type="button" class="btn btn-success" value="start" id="start">Start</button>
+    </div>
+
+
+  <!-- END OF TIMER -->
+            
+    <section id="game">
+      <div id="cards">
+        <div class="card">
+          <div class="face front"></div>
+          <div class="face back">
+            <div class="name"></div>
+              <div class="login"></div>
+              </div>
+            </div>
+          </div>
+          <div id="loader">
+            <div class="three-quarters-loader">
+              Loading…
+            </div>
+          </div>
+    </section>
+    <section id="popup" class="hide">
+      <div id="popup-bg"></div>
+        <div id="popup-box">
+          <div class="ribbon hide">
+            <div class="ribbon-body">
+              <span>New Record</span>
+            </div>
+            <div class="triangle">
+            </div>
+          </div>
+          <div id="popup-box-content">
+            <!--  -->
+            <!-- <audio id="buttonactive">
+              <source src="media/06-level-complete.mp3"/>
+              <source src="media/button_active.ogg"/>
+              </audio> -->
+            <!--  -->
+            <h1>You Won!</h1>
+              <p>Your Score:</p>
+              <p><span class='score'>13</span></p>
+              <p><small>
+                Last Score: <span class='last-score'>20</span><br>
+                Saved on: <span class='saved-time'>13/4/2011 15:15:15</span>
+                </small>
+              </p>
+          </div>
+        </div>
+      </section>
+      <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+      <script src="js/gh.min.js"></script>
+      <script src="js/Hubbers.js"></script>
+      <script src="js/memory-matching.js"></script>
+  </body>
+</html>
+
+
+
+<!-- java -->
+
+<script type="text/javascript">
+var interval;
+    var minutes = 0;
+    var seconds = 5;
+    
+
+    function countdown(element) {
+        interval = setInterval(function() {
+            var el = document.getElementById(element);
+            if(seconds == 0) {
+                if(minutes == 0) {
+                    alert(el.innerHTML = "Times Up!");                    
+                    return el = document.getElementById(start);
+                    
+                    
+                    clearInterval(interval);
+                    return;
+                } else {
+                    minutes--;
+                    seconds = 6;
+                }
+            }
+            if(minutes > 0) {
+                var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
+            } else {
+                var minute_text = '';
+            }
+            var second_text = seconds > 1 ? 'seconds' : 'second';
+            el.innerHTML = minute_text + ' ' + seconds + ' ' + second_text + ' remaining';
+            seconds--;
+        }, 1000);
+    }
+    
+    var reset = document.getElementById('reset');
+    reset.onclick = function() {
+    minutes = 0;
+    seconds = 10;
+    clearInterval(interval);
+    interval = null;
+}
+
+    var start = document.getElementById('start');
+    start.onclick = function() {
+    if (!interval) {
+        countdown('countdown');
+    }
+}
+    
+    
+</script> 
