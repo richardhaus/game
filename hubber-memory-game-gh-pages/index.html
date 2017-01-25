@@ -3,7 +3,7 @@
   <head>
     <link rel="icon" type="image/ico" href="favicon.ico"/>
       <meta charset="utf-8">
-        <title>Hubber Matching Game</title>
+        <title>Match Game</title>
           <link href='https://fonts.googleapis.com/css?family=Sansita+One' rel='stylesheet' type='text/css'>
           <link href="https://fonts.googleapis.com/css?family=Orbitron:400,700" rel="stylesheet" type="text/css" >
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -13,37 +13,37 @@
   </head>
   <body>
     <header>
-      <h1>Hubber Matching Game</h1>
+      <h1>Match Game</h1>
     </header>
-            
-  <!-- START OF TIMER -->
-            
-    <div id='countdown'>
-      <button type="button" class="btn btn-info" value="reset" id="reset">Reset</button>
-      <button type="button" class="btn btn-success" value="start" id="start">Start</button>
+    <div class="timer">  <!-- START OF TIMER -->
+      <h1><span class="minute">06</span>:<span class="second">41</span></h1>
     </div>
-
-
-  <!-- END OF TIMER -->
-            
-    <section id="game">
-      <div id="cards">
-        <div class="card">
-          <div class="face front"></div>
-          <div class="face back">
-            <div class="name"></div>
-              <div class="login"></div>
+    <div class="control">
+      <button class="btn btn-success" onClick="timer.start(1000)">Start</button> 
+      <button class="btn btn-info"onClick="timer.reset(10)">Reset</button>
+    </div>
+      <section id="game">  <!-- END OF TIMER -->
+        <div id="cards">
+          <div class="card">
+            <div class="face front">
+            </div>
+            <div class="face back">
+              <div class="name">
+              </div>
+              <div class="login">
               </div>
             </div>
           </div>
-          <div id="loader">
-            <div class="three-quarters-loader">
-              Loading…
-            </div>
+        </div>
+        <div id="loader">
+          <div class="three-quarters-loader">
+            Loading…
           </div>
-    </section>
-    <section id="popup" class="hide">
-      <div id="popup-bg"></div>
+        </div>
+      </section>
+      <section id="popup" class="hide">
+        <div id="popup-bg">
+        </div>
         <div id="popup-box">
           <div class="ribbon hide">
             <div class="ribbon-body">
@@ -53,20 +53,20 @@
             </div>
           </div>
           <div id="popup-box-content">
-            <!--  -->
-            <!-- <audio id="buttonactive">
-              <source src="media/06-level-complete.mp3"/>
-              <source src="media/button_active.ogg"/>
-              </audio> -->
-            <!--  -->
+                  <!--  -->
+                  <!-- <audio id="buttonactive">
+                      <source src="media/06-level-complete.mp3"/>
+                      <source src="media/button_active.ogg"/>
+                      </audio> -->
+                      <!--  -->
             <h1>You Won!</h1>
-              <p>Your Score:</p>
-              <p><span class='score'>13</span></p>
-              <p><small>
-                Last Score: <span class='last-score'>20</span><br>
-                Saved on: <span class='saved-time'>13/4/2011 15:15:15</span>
-                </small>
-              </p>
+            <p>Your Score:</p>
+            <p><span class='score'>13</span></p>
+            <p>
+              <small>Last Score: <span class='last-score'>20</span><br>
+                      Saved on: <span class='saved-time'>13/4/2011 15:15:15</span>
+              </small>
+            </p>
           </div>
         </div>
       </section>
@@ -74,60 +74,128 @@
       <script src="js/gh.min.js"></script>
       <script src="js/Hubbers.js"></script>
       <script src="js/memory-matching.js"></script>
-  </body>
-</html>
+    </body>
+  </html>
 
 
 
 <!-- java -->
 
-<script type="text/javascript">
-var interval;
-    var minutes = 0;
-    var seconds = 5;
-    
+<script>
 
-    function countdown(element) {
-        interval = setInterval(function() {
-            var el = document.getElementById(element);
-            if(seconds == 0) {
-                if(minutes == 0) {
-                    alert(el.innerHTML = "Times Up!");                    
-                    return el = document.getElementById(start);
-                    
-                    
-                    clearInterval(interval);
-                    return;
-                } else {
-                    minutes--;
-                    seconds = 6;
-                }
-            }
-            if(minutes > 0) {
-                var minute_text = minutes + (minutes > 1 ? ' minutes' : ' minute');
-            } else {
-                var minute_text = '';
-            }
-            var second_text = seconds > 1 ? 'seconds' : 'second';
-            el.innerHTML = minute_text + ' ' + seconds + ' ' + second_text + ' remaining';
-            seconds--;
-        }, 1000);
-    }
-    
-    var reset = document.getElementById('reset');
-    reset.onclick = function() {
-    minutes = 0;
-    seconds = 10;
-    clearInterval(interval);
-    interval = null;
+function _timer(callback)
+{
+var time = 0; 
+var mode = 1; 
+var status = 0; 
+var timer_id; 
+
+this.start = function(interval)
+{
+interval = (typeof(interval) !== 'undefined') ? interval : 1000;
+
+if(status == 0)
+{
+status = 1;
+timer_id = setInterval(function()
+{
+switch(mode)
+{
+default:
+if(time)
+{
+time--;
+generateTime();
+if(typeof(callback) === 'function') callback(time);
+}
+break;
+
+case 1:
+if(time < 86400)
+{
+time++;
+generateTime();
+if(typeof(callback) === 'function') callback(time);
+}
+break;
+}
+}, interval);
+}
 }
 
-    var start = document.getElementById('start');
-    start.onclick = function() {
-    if (!interval) {
-        countdown('countdown');
-    }
+
+this.stop = function()
+{
+if(status == 1)
+{
+status = 0;
+clearInterval(timer_id);
 }
-    
-    
-</script> 
+}
+
+
+this.reset = function(sec)
+{
+sec = (typeof(sec) !== 'undefined') ? sec : 0;
+time = sec;
+generateTime(time);
+}
+
+this.mode = function(tmode)
+{
+mode = tmode;
+}
+
+
+this.getTime = function()
+{
+return time;
+}
+
+this.getMode = function()
+{
+return mode;
+}
+
+this.getStatus
+{
+return status;
+}
+
+function generateTime()
+{
+var second = time % 60;
+var minute = Math.floor(time / 60) % 60;
+var hour = Math.floor(time / 3600) % 60;
+
+second = (second < 10) ? '0'+second : second;
+minute = (minute < 10) ? '0'+minute : minute;
+hour = (hour < 10) ? '0'+hour : hour;
+
+$('div.timer span.second').html(second);
+$('div.timer span.minute').html(minute);
+
+}
+}
+
+var timer;
+
+$(document).ready(function(e) 
+{
+timer = new _timer
+(
+function(time)
+{
+if(time == 0)
+{
+timer.stop();
+
+}
+}
+);
+timer.reset(0);
+timer.mode(0);
+});
+
+//-->
+</script>
